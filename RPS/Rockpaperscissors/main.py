@@ -31,6 +31,18 @@ class RockPaperScissor:
             except ValueError:
                 print("Invalid input! Please enter a number.")
     
+    #function for difficulty input
+    def get_difficulty_input(self):
+        while True:
+            try:
+                difficulty_input = input("SELECT\n e. Easy\n h. Hard \n Your pick: ")
+                if difficulty_input in ['E', 'e', 'H', 'h']:
+                    return difficulty_input
+                else:
+                    print("Invalid input! Please select E, e, h or H.")
+            except ValueError as e:
+                print("Invalid input! Please select E, e, h or H.")
+
     #Easy Logic    
     def easy_difficulty(self, player_choice):
         temp = self.get_computer_choice()
@@ -44,7 +56,7 @@ class RockPaperScissor:
             computer_choice = 0
         return computer_choice
     
-        #Hard Logic    
+    #Hard Logic    
     def hard_difficulty(self, player_choice):
         temp = self.get_computer_choice()
         if player_choice == 1: #Rock
@@ -57,25 +69,49 @@ class RockPaperScissor:
             computer_choice = 0
         return computer_choice
 
+class game_cl:
+    def __init__(self):
+        self.game = RockPaperScissor()
+        self.player_score = 0
+        self.computer_score = 0
+
     def match_results(self, player_choice, computer_choice):
         if player_choice == computer_choice:
             print(f"Draw!\n Player Picks: {player_choice}, Computer Picks: {computer_choice}")
+            print(f"\nPlayer Score: {self.player_score}, Computer Score: {self.computer_score}")
         elif (player_choice == 1 and computer_choice == 3) or (player_choice == 2 and computer_choice == 1) or (player_choice == 3 and computer_choice == 2):
+            self.player_score += 1
             print(f"Player wins!\n Player Picks: {player_choice}, Computer Picks: {computer_choice}")
+            print(f"\nPlayer Score: {self.player_score}, Computer Score: {self.computer_score}")
         else:
+            self.computer_score += 1
             print(f"Computer wins!\n Player Picks: {player_choice}, Computer Picks: {computer_choice}")
-
-
-class easy_difficulty_cl:
-    def __init__(self):
-        self.game = RockPaperScissor()
+            print(f"\nPlayer Score: {self.player_score}, Computer Score: {self.computer_score}")
 
     def display_game(self):
-        player_choice = self.game.get_player_input()
-        computer_choice = self.game.easy_difficulty(player_choice)
-        
-        self.game.match_results(player_choice, computer_choice)
+        difficulty_choice = self.game.get_difficulty_input()
+        if difficulty_choice == 'E' or difficulty_choice == 'e':
+            while self.player_score != 3 or self.computer_score != 3:
+                if self.player_score == 3 or self.computer_score == 3:
+                    break
+                else:
+                    player_choice = self.game.get_player_input()
+                    computer_choice = self.game.easy_difficulty(player_choice)
+                    self.match_results(player_choice, computer_choice)
+        else:
+            player_choice = self.game.get_player_input()
+            computer_choice = self.game.hard_difficulty(player_choice)
+            self.match_results(player_choice, computer_choice)
+            while self.player_score != 3 or self.computer_score != 3:
+                if self.player_score == 3 or self.computer_score == 3:
+                    break
+                else:
+                    player_choice = self.game.get_player_input()
+                    computer_choice = self.game.easy_difficulty(player_choice)
+                    self.match_results(player_choice, computer_choice)
 
 
-game_begins = easy_difficulty_cl()
+game_begins = game_cl()
 game_begins.display_game()
+
+
