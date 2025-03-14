@@ -2,7 +2,8 @@ class TictacToe:
     def __init__(self):
         #Variables
         self.gameboard = [" "] * 9
-        self.temp = self.winner = 0
+        self.temp = 0
+        self.winner = 0
         self.player1, self.player2 = 1, 2
         self.user_input = ""
 
@@ -13,16 +14,13 @@ class TictacToe:
     
     #Function that returns 1 if the board is full
     def board_scanner(self):
-        for i in range(len(self.gameboard)):
-            if (self.gameboard[i] != 0):
-                self.temp = 1
-            else:
-                self.temp = 0
-        return self.temp
+        for cell in self.gameboard:
+            if cell == " ":
+                return 1
+        return 0
     
     #Game Logic
     def game_logic(self):
-        self.temp = 0
         win_conditions = [
             (0, 1, 2), (3, 4, 5), (6, 7, 8), #row 1, 2, 3
             (0, 3, 6), (1, 4, 7), (2, 5, 8), #column 1, 2, 3
@@ -30,11 +28,13 @@ class TictacToe:
         ]
         for a, b, c in win_conditions:
             if self.gameboard[a] == 'x' and self.gameboard[b] == 'x' and self.gameboard[c] == 'x':
-                self.temp = 1
+                self.winner = 1
+                return self.winner
             elif self.gameboard[a] == 'o' and self.gameboard[b] == 'o' and self.gameboard[c] == 'o':
-                self.temp = 2
+                self.winner = 2
+                return self.winner
         
-        return self.temp
+        return self.winner
     
     #functions that get user's prompt
     def get_player1_input(self):
@@ -92,22 +92,28 @@ class game_begins:
         self.winner = 0
         
     def game_loop(self):
-        while self.temp != 0 or (self.winner != 1 or self.winner != 2):
+        while self.temp != 0 or self.winner == 0:
+            self.temp = self.game.board_scanner()
 
             #displays the board
             self.game.displays_gameboard()
-
+            print("\nPlayer 1 Turn!")
             self.game.get_player1_input()
             self. winner = self.game.game_logic()
-            print(self.winner)
-            self.temp = self.game.board_scanner()
+            if self.winner !=0:
+                print("\nPlayer 1 Wins!")
+                self.game.displays_gameboard()
+                break
 
             self.game.displays_gameboard()
-
+            print("\nPlayer 2 Turn!")
             self.game.get_player2_input()
-            self.winner = self.game.game_logic()
-            print(self.winner)
-            self.temp = self.game.board_scanner()
+            self. winner = self.game.game_logic()
+            if self.winner !=0:
+                print("\nPlayer 2 Wins!")
+                self.game.displays_gameboard()
+                break
+
 
 
 
